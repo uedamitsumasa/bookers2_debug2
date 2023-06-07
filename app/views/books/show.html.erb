@@ -28,19 +28,9 @@
               <%end%>
               </td>
 
-  <% if @book.favorited_by?(current_user) %>
-    <td>
-      <%= link_to book_favorites_path(@book), method: :delete do %>
-        ♥<%= @book.favorites.count %> いいね
-      <% end %>
-    </td>
-    <% else %>
-    <td>
-      <%= link_to book_favorites_path(@book), method: :post do %>
-        ♡<%= @book.favorites.count %> いいね
-      <% end %>
-    </td>
-  <% end %>
+  <td id="favorite_buttons_<%= @book.id %>">
+          <%= render "favorites/favorites", book: @book %>
+        </td>
 
 
   <td>
@@ -52,7 +42,7 @@
 
 
 
-<diV>
+<div>
   <% @book.book_comments.each do |book_comment| %>
  <div>
    <%= image_tag book_comment.user.get_profile_image, size:'50x50' %> </br>
@@ -68,13 +58,8 @@
 <% end %>
 </diV>
 
-
-
-      <div>
-  <%= form_with model: [@book, @book_comment] do |f| %>
-    <%= f.text_area :comment, rows: '5', cols: '50',  placeholder: "コメントをここに" %>
-    <%= f.submit "送信する" %>
-  <% end %>
+<div id="other_comments_<%= @book.id %>">
+          <%= render "book_comments/book_comments", book: @book, book_comment: @book_comment%>
 </div>
 
     </div>
