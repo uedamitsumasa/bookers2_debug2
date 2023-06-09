@@ -32,8 +32,23 @@
         <%= link_to "フォローする", user_relationships_path(user.id), method: :post, class:"btn btn-success" %>
       <% end %>
       <% end %>
+
+  <% if user != current_user.id %>
+  <% if (current_user.following? user) && (user.following? current_user) %>
+  <% if @isRoom == true %>
+ <%= link_to room_path(@roomId) do%>
+           <i class="fas fa-envelope"></i>
+<% end %>
+      <% else %>
+        <%= form_with(model: @room, local: true) do |f| %>
+          <%= fields_for @entry do |e| %>
+            <%= e.hidden_field :user_id, value: user.id %>
+            <%= button_tag type: 'submit' do %>
+              <i class="fas fa-envelope"></i>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
 </div>
-
-
-
-

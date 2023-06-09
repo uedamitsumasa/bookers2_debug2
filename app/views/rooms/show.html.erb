@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-lg-2"></div>
+  <div class="col-lg-8 frame-notification">
+    <hr>
+    <% if @messages.present? %>
+      <% @messages.each do |message| %>
+        <div class="row balloon5">
+          <% if current_user.name == message.user.name %>
+            <div class="col-lg-12 text-right">
+              <div class="chatting">
+                <div class="say">
+                  <%= message.content %>
+                </div>
+                <br>
+                <small><%= message.created_at.to_s(:datetime_jp) %></small>
+              </div>
+            </div>
+          <% else %>
+            <div class="col-lg-2 text-center">
+              <%= attachment_image_tag(message.user, :image, format: 'jpeg', fallback: "noimage.png", size: "50x40") %>
+              <small><%= link_to message.user.name, user_path(message.user), class: "d-block mt-1" %></small>
+              <br>
+            </div>
+            <div class="col-lg-10 text-left">
+              <div class="chatting">
+                <div class="says">
+                  <p><%= message.content %></p>
+                </div>
+                <br>
+                <small><%= message.created_at.to_s(:datetime_jp) %></small>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <hr>
+      <% end %>
+    <% else %>
+      <p>メッセージはありません。</p>
+    <% end %>
+
+    <div class="row">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-8 text-center">
+        <%= form_with(model: @message, local: true) do |f| %>
+          <%= f.text_field :content, placeholder: "メッセージを入力して下さい", size: 50 %>
+          <%= f.hidden_field :room_id, value: @room.id %>
+          <%= f.submit "投稿", class: 'btn btn-outline-secondary btn-sm ml-2' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
