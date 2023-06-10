@@ -3,12 +3,14 @@ class BooksController < ApplicationController
 
   def show
     @book = Book.find(params[:id])
+    current_user.read_counts.create(book_id: @book.id)
     @book_comment = BookComment.new
   end
 
   def index
     @book = Book.new
-    @books = Book.all
+    @books = Book.includes(:favorited_users)
+             .sort_by { |book| -book.favorited_users.size }
     @user = current_user
   end
 
